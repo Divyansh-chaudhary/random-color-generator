@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>color flipper</title>
+    <style>
+      *,
+      *::after,
+      *::before {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+      }
+      nav {
+        height: 55px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 0 5px #aaa;
+      }
+      .heading h2 {
+        font-size: 1.3rem;
+        font-weight: lighter;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .flipper-type {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .flipper-type p {
+        margin: 0 1rem;
+        font-size: 1rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+        border: 2px solid #777;
+        border-radius: 5px;
+        padding: 4px 12px;
+      }
+      .flipper-type p:hover {
+        color: gray;
+      }
+      .container {
+        height: calc(100vh - 55px);
+        display: flex;
+        justify-content: center;
+        background-color: lightgray;
+        align-items: center;
+      }
+      button {
+        padding: 1rem 2rem;
+        background-color: white;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+        border: 4px solid lightgray;
+        border-radius: 10px;
+        outline: none;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+      .selected {
+        border: 4px solid #777 !important;
+        color: #777 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="heading">
+        <h2>Color Flipper</h2>
+      </div>
+      <div class="flipper-type">
+        <p id="simple" class="selected">Simple</p>
+        <p id="hex">Hex</p>
+      </div>
+    </nav>
+    <section class="container">
+      <button id="color-btn">
+        Change color - <span id="color-code">lightgray</span>
+      </button>
+    </section>
+  </body>
+  <script>
+    const el = (selector) => document.querySelector(selector);
+
+    const container = el(".container");
+    const colorCodeSpan = el("#color-code");
+    const simpleBtn = el("#simple");
+    const hexBtn = el("#hex");
+
+    let state = {
+      type: "simple",
+      simpleArr: ["crimson", "violet", "lightblue", "lightgray", "purple"],
+      characters: ["a", "b", "c", "d", "e", "f", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    };
+
+    const simpleType = () => {
+      hexBtn.classList.remove("selected");
+      simpleBtn.classList.add("selected");
+      state.type = "simple";
+    };
+    const hexType = () => {
+      simpleBtn.classList.remove("selected");
+      hexBtn.classList.add("selected");
+      state.type = "hex";
+    };
+
+    const getSimpleColor = () =>
+      state.simpleArr[Math.floor(Math.random() * state.simpleArr.length)];
+
+    const getRandomColor = () => {
+      const GRC = () =>
+        state.characters[Math.floor(Math.random() * state.characters.length)];
+      return `#${GRC()}${GRC()}${GRC()}${GRC()}${GRC()}${GRC()}`;
+    };
+
+    const insertColor = (color) => {
+      container.style.backgroundColor = color;
+      colorCodeSpan.innerHTML = color;
+    };
+
+    const changeColor = () =>
+      insertColor(
+        state.type === "simple" ? getSimpleColor() : getRandomColor()
+      );
+
+    simpleBtn.onclick = simpleType;
+    hexBtn.onclick = hexType;
+    el("#color-btn").onclick = changeColor;
+  </script>
+</html>
